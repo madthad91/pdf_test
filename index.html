@@ -1,0 +1,55 @@
+<!-- for legacy browsers add compatibility.js -->
+<script src="./lib/compatibility.js"></script>
+<style>
+.form-control{
+  width:100px !important;
+  margin:4px;
+  display:inline-block !important;
+}
+</style>
+<script src="./lib/pdf.js"></script>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <!-- bower:css -->
+ <!-- endbower -->
+<h1>PDF.js 'Hello, world!' example</h1>
+<form>
+<div class="form-group">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 1)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 2)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 3)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 4)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 5)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 6)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 7)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 8)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 9)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 10)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 11)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 12)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 13)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 14)">
+<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 15)">
+<button type="button" class="btn btn-primary" onclick="saveImg()">save image</button>
+</div>
+</form>
+
+ <canvas id='signatureCanvas' width='300' height='37' style='border: 1px solid black;'></canvas>
+        <div class='button-bar'>
+            <a class='button button-energized' onclick='clearCanvas()'>Clear</a>
+            <a class='button button-balanced' onclick='saveCanvas()'>Sign</a>
+        </div>
+   <canvas id='signatureCanvas2' width='300' height='37' style='border: 1px solid black;'></canvas>
+        <div class='button-bar'>
+            <a class='button button-energized' onclick='clearCanvas2()'>Clear2</a>
+            <a class='button button-balanced' onclick='saveCanvas2()'>Sign2</a>
+        </div>
+<canvas id="the-canvas"></canvas>
+<img id="res">
+ <!-- bower:js -->
+ <script src="bower_components/signature_pad/signature_pad.js"></script>
+ <!-- endbower -->
+<script src="index.js"></script>
+<link type="stylesheet" src="index.css">
+
+
+<!--hosted by surge -d pdf_test.surge.sh-->
