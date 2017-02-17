@@ -1,53 +1,111 @@
 <!-- for legacy browsers add compatibility.js -->
 <script src="./lib/compatibility.js"></script>
 <style>
-.form-control{
-  width:100px !important;
-  margin:4px;
-  display:inline-block !important;
-}
+    .form-control {
+        width: 300px !important;
+        margin: 4px;
+        display: inline-block !important;
+    }
 </style>
 <script src="./lib/pdf.js"></script>
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
- <!-- bower:css -->
- <!-- endbower -->
-<h1>PDF.js 'Hello, world!' example</h1>
-<form>
-<div class="form-group">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 1)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 2)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 3)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 4)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 5)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 6)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 7)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 8)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 9)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 10)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 11)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 12)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 13)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 14)">
-<input class="form-control" type="text" id="words" onkeyup="updateImage(this, 15)">
-<button type="button" class="btn btn-primary" onclick="saveImg()">save image</button>
+<!-- bower:css -->
+<!-- endbower -->
+<br>
+<div style="width: 80%; height: 800px; text-align: center; margin: auto" class="panel panel-default">
+    <div class="panel-heading">PDF.js 'Hello, world!' example</div>
+    <div class="panel-body">
+        <form style="text-align: left" class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <legend>Participant/Volunteer</legend>
+                    <div class="form-group">
+                        <label for="author_name">Name</label>
+                        <input class="form-control" type="text" id="author_name" onkeyup="updateImage(this, 1); updateImage(this, 2)">
+                    </div>
+                    <div class="form-group">
+                        <label for="author_date">Date</label>
+                        <input class="form-control" type="date" id="author_date" onchange="updateImage(this, 3)">
+                    </div>
+                    <div class="form-group">
+                        <label>Enter your signature below</label><br>
+                        <canvas id='signatureCanvas' width='300' height='37' style='border-radius:4px; border: 1px solid lightgrey ;'></canvas>
+                        <br>
+                        <div class='button-bar'>
+                            <button type="button" class='btn btn-primary' onclick='clearCanvas()'>Clear</button>
+                            <button type="button" class='btn btn-primary' onclick='saveCanvas()'>Sign</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="author_email">Email</label>
+                        <input class="form-control" type="email" id="author_email" onkeyup="updateImage(this, 4)">
+                    </div>
+                    <div class="form-group">
+                        <label for="author_phone">Phone</label>
+                        <input class="form-control" type="text" id="author_phone" onkeyup="updateImage(this, 5)">
+                    </div>
+                    <div class="form-group">
+                        <label for="author_street">Street Address</label>
+                        <input class="form-control" type="text" id="author_street" onkeyup="updateImage(this, 7)">
+                    </div>
+                    <div class="form-group">
+                        <label for="author_apt">Apt/Suite</label>
+                        <input class="form-control" type="text" id="author_apt" onkeyup="updateImage(this, 8)">
+                    </div>
+                    <div class="form-group">
+                        <label for="author_city">City</label>
+                        <input class="form-control" type="text" id="author_city" onkeyup="updateImage(this, 9)">
+                    </div>
+                    <div class="form-group">
+                        <label for="author_state">State</label>
+                        <input class="form-control" type="text" id="author_state" onkeyup="updateImage(this, 10)">
+                    </div>
+                    <div class="form-group">
+                        <label for="author_zip">Zip</label>
+                        <input class="form-control" type="text" id="author_zip" onkeyup="updateImage(this, 11)">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <legend>Witness</legend>
+                    <div class="form-group">
+                        <label for="witness_name">Name</label>
+                        <input class="form-control" type="text" id="witness_name" onkeyup="updateImage(this, 12)">
+                    </div>
+                    <div class="form-group">
+                        <label for="witness_date">Date</label>
+                        <input class="form-control" type="text" id="witness_date" onkeyup="updateImage(this, 13)">
+                    </div>
+                    <div class="form-group">
+                        <label>Enter your signature below</label><br>
+                        <canvas id='signatureCanvas2' width='300' height='37' style='border-radius:4px; border: 1px solid lightgrey ;'></canvas>
+                        <br>
+                        <div class='button-bar'>
+                            <button type="button" class='btn btn-primary' onclick='clearCanvas2()'>Clear</button>
+                            <button type="button" class='btn btn-primary' onclick='saveCanvas2()'>Sign</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="witness_email">Email</label>
+                        <input class="form-control" type="text" id="witness_email" onkeyup="updateImage(this, 14)">
+                    </div>
+                    <div class="form-group">
+                        <label for="witness_phone">Phone</label>
+                        <input class="form-control" type="text" id="witness_phone" onkeyup="updateImage(this, 15)">
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="text-align: center; margin: auto; width:100%">
+                <button type="button" class="btn btn-primary" onclick="saveImg()">save image</button>
+            </div>
+        </form>
+    </div>
 </div>
-</form>
 
- <canvas id='signatureCanvas' width='300' height='37' style='border: 1px solid black;'></canvas>
-        <div class='button-bar'>
-            <a class='button button-energized' onclick='clearCanvas()'>Clear</a>
-            <a class='button button-balanced' onclick='saveCanvas()'>Sign</a>
-        </div>
-   <canvas id='signatureCanvas2' width='300' height='37' style='border: 1px solid black;'></canvas>
-        <div class='button-bar'>
-            <a class='button button-energized' onclick='clearCanvas2()'>Clear2</a>
-            <a class='button button-balanced' onclick='saveCanvas2()'>Sign2</a>
-        </div>
-<canvas id="the-canvas"></canvas>
+<canvas id="the-canvas" style="display:none"></canvas>
 <img id="res">
- <!-- bower:js -->
- <script src="bower_components/signature_pad/signature_pad.js"></script>
- <!-- endbower -->
+<!-- bower:js -->
+<script src="bower_components/signature_pad/signature_pad.js"></script>
+<!-- endbower -->
 <script src="index.js"></script>
 <link type="stylesheet" src="index.css">
 
