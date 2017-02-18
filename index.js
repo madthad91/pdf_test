@@ -45,7 +45,6 @@ loadingTask.promise.then(function(pdf) {
 });
 
 function updateImage(a, idx) {
-    console.log(a, idx, a.value);
     var val = a.value;
     var c = document.getElementById("the-canvas").getContext("2d");
     c.font = "24px Verdana";
@@ -66,34 +65,31 @@ function updateImage(a, idx) {
             c.fillText(val, 630, 725); // phone
             break;
         case 6:
-            c.fillText(val, 95, 725); // email
-            break;
-        case 7:
             c.fillText(val, 95, 781.5); //street address
             break;
-        case 8:
+        case 7:
             c.fillText(val, 295, 781.5); //apt/suite
             break;
-        case 9:
+        case 8:
             c.fillText(val, 520, 781.5); //city
             break;
-        case 10:
+        case 9:
             c.fillText(val, 665, 781.5); //state
             break;
-        case 11:
+        case 10:
             c.fillText(val, 755, 781.5); //zip
             break;
-        case 12:
+        case 11:
             c.fillText(val, 95, 940); //witness name
             break;
-        case 13:
+        case 12:
             c.fillText(val, 630, 940); //witness date
             break;
             // c.fillText(val, 95, 997.5); //witness signature
-        case 14:
+        case 13:
             c.fillText(val, 95, 1055); //witness email
             break;
-        case 15:
+        case 14:
             c.fillText(val, 630, 1055); //witness phone
             break;
     }
@@ -103,7 +99,27 @@ function updateImage(a, idx) {
 
 function saveImg() {
     var c = document.getElementById("the-canvas");
-    document.getElementById("res").src = c.toDataURL();
+    var d = document;
+    updateImage(d.getElementById("author_name"), 1);
+    updateImage(d.getElementById("author_name"), 2);
+    updateImage(d.getElementById("author_date"), 3);
+    saveCanvas();
+    updateImage(d.getElementById("author_email"), 4);
+    updateImage(d.getElementById("author_phone"), 5);
+    updateImage(d.getElementById("author_street"), 6);
+    updateImage(d.getElementById("author_apt"), 7);
+    updateImage(d.getElementById("author_city"), 8);
+    updateImage(d.getElementById("author_state"), 9);
+    updateImage(d.getElementById("author_zip"), 10);
+    updateImage(d.getElementById("witness_name"), 11);
+    updateImage(d.getElementById("witness_date"), 12);
+    saveCanvas2();
+    updateImage(d.getElementById("witness_email"), 13);
+    updateImage(d.getElementById("witness_phone"), 14);
+    setTimeout(function(){
+        document.getElementById("res").src = c.toDataURL();
+    }, 0);
+    
 }
 
 var canvas = document.getElementById('signatureCanvas');
