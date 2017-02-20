@@ -1,6 +1,7 @@
 // If absolute URL from the remote server is provided, configure the CORS
 // header on that server.
-var url = 'm.pdf';
+var url = 'Media Waiver Form.pdf';
+var url2 = 'Adult Waiver & Release of Liability rev 3-19-12.pdf';
 
 // Disable workers to avoid yet another cross-origin issue (workers need
 // the URL of the script to be loaded, and dynamically loading a cross-origin
@@ -11,20 +12,28 @@ PDFJS.disableWorker = true;
 PDFJS.workerSrc = 'http://mozilla.github.io/pdf.js/build/pdf.worker.js';
 
 // Asynchronous download of PDF
-var loadingTask = PDFJS.getDocument(url); //can take url or base64 image as {data: pdfData}
-loadingTask.promise.then(function(pdf) {
+// var loadingTask = PDFJS.getDocument(url); //can take url or base64 image as {data: pdfData}
+// loadingTask.promise;
+Promise.all([PDFJS.getDocument(url).promise, PDFJS.getDocument(url2).promise]).then(function(res_set){
+    res_set.forEach(function(val, idx){
+        postprocessor(val, idx+1);
+    })
+}, function(reason) {
+    // PDF loading error
+    console.error(reason);
+});
+
+function postprocessor(pdf, idx) {
     console.log('PDF loaded');
 
     // Fetch the first page
     var pageNumber = 1;
     pdf.getPage(pageNumber).then(function(page) {
-        console.log('Page loaded', page, Object.getOwnPropertyNames(page));
-
         var scale = 1.5;
         var viewport = page.getViewport(scale);
 
         // Prepare canvas using PDF page dimensions
-        var canvas = document.getElementById('the-canvas');
+        var canvas = document.getElementById('the-canvas'+idx);
         var context = canvas.getContext('2d');
         canvas.height = viewport.height;
         canvas.width = viewport.width;
@@ -39,18 +48,15 @@ loadingTask.promise.then(function(pdf) {
             console.log('Page rendered');
         });
     });
-}, function(reason) {
-    // PDF loading error
-    console.error(reason);
-});
+}
 
-function updateImage(a, idx) {
+function updateMediaWaiverTemplate(a, idx) {
     var val = a.value;
-    var c = document.getElementById("the-canvas").getContext("2d");
-    c.font = "24px Verdana";
+    var c = document.getElementById("the-canvas1").getContext("2d");
+    c.font = "16px Verdana";
     switch (idx) {
         case 1:
-            c.fillText(val, 120, 450); // my namee
+            c.fillText(val, 120, 450); // participant/volunteer name
             break;
         case 2:
             c.fillText(val, 95, 610); //name print
@@ -97,29 +103,63 @@ function updateImage(a, idx) {
     //c.drawImage(imageObj2, 0, 0, 82, 75);
 }
 
+
+function updateReleaseWaiverTemplate(a, idx) {
+    var val = a.value;
+    var c = document.getElementById("the-canvas2").getContext("2d");
+    c.font = "16px Verdana";
+    switch (idx) {
+        case 1:
+            c.fillText(val, 55, 1055); // participant/volunteer name
+            break;
+        case 2:
+            c.fillText(val, 550, 1000); // participant/volunteer date
+            break
+        case 3:
+            c.fillText(val, 500, 1050); // event text
+            break;
+    }
+
+    //c.drawImage(imageObj2, 0, 0, 82, 75);
+}
 function saveImg() {
-    var c = document.getElementById("the-canvas");
+    createMediaWaiver();
+    createReleaseWaiver();    
+}
+
+function createMediaWaiver(){
+    var c = document.getElementById("the-canvas1");
     var d = document;
-    updateImage(d.getElementById("author_name"), 1);
-    updateImage(d.getElementById("author_name"), 2);
-    updateImage(d.getElementById("author_date"), 3);
-    saveCanvas();
-    updateImage(d.getElementById("author_email"), 4);
-    updateImage(d.getElementById("author_phone"), 5);
-    updateImage(d.getElementById("author_street"), 6);
-    updateImage(d.getElementById("author_apt"), 7);
-    updateImage(d.getElementById("author_city"), 8);
-    updateImage(d.getElementById("author_state"), 9);
-    updateImage(d.getElementById("author_zip"), 10);
-    updateImage(d.getElementById("witness_name"), 11);
-    updateImage(d.getElementById("witness_date"), 12);
-    saveCanvas2();
-    updateImage(d.getElementById("witness_email"), 13);
-    updateImage(d.getElementById("witness_phone"), 14);
+    updateMediaWaiverTemplate(d.getElementById("author_name"), 1);
+    updateMediaWaiverTemplate(d.getElementById("author_name"), 2);
+    updateMediaWaiverTemplate(d.getElementById("author_date"), 3);
+    overlayAuthorSignature();
+    updateMediaWaiverTemplate(d.getElementById("author_email"), 4);
+    updateMediaWaiverTemplate(d.getElementById("author_phone"), 5);
+    updateMediaWaiverTemplate(d.getElementById("author_street"), 6);
+    updateMediaWaiverTemplate(d.getElementById("author_apt"), 7);
+    updateMediaWaiverTemplate(d.getElementById("author_city"), 8);
+    updateMediaWaiverTemplate(d.getElementById("author_state"), 9);
+    updateMediaWaiverTemplate(d.getElementById("author_zip"), 10);
+    updateMediaWaiverTemplate(d.getElementById("witness_name"), 11);
+    updateMediaWaiverTemplate(d.getElementById("witness_date"), 12);
+    overlayWitnessSignature();
+    updateMediaWaiverTemplate(d.getElementById("witness_email"), 13);
+    updateMediaWaiverTemplate(d.getElementById("witness_phone"), 14);
     setTimeout(function(){
-        document.getElementById("res").src = c.toDataURL();
+        document.getElementById("mediaWaiver").src = c.toDataURL();
     }, 0);
-    
+}
+
+function createReleaseWaiver(){
+    var c = document.getElementById("the-canvas2");
+    var d = document;
+     updateReleaseWaiverTemplate(d.getElementById("author_name"), 1);
+     updateReleaseWaiverTemplate(d.getElementById("author_date"), 2);
+     updateReleaseWaiverTemplate({value: "crayon's events"}, 3);
+     setTimeout(function(){
+        document.getElementById("releaseWaiver").src = c.toDataURL();
+    }, 0);
 }
 
 var canvas = document.getElementById('signatureCanvas');
@@ -131,12 +171,14 @@ function clearCanvas() {
     signaturePad.clear();
 }
 
-function saveCanvas() {
+function overlayAuthorSignature() {
     var sigImg = signaturePad.toDataURL();
     var image = new Image();
     image.onload = function() {
-        var c = document.getElementById("the-canvas").getContext("2d");
+        var c = document.getElementById("the-canvas1").getContext("2d");
         c.drawImage(image, 95, 638);
+        c = document.getElementById("the-canvas2").getContext("2d");
+        c.drawImage(image, 45, 964);
     };
     image.src = sigImg;
 }
@@ -145,11 +187,11 @@ function clearCanvas2() {
     signaturePad2.clear();
 }
 
-function saveCanvas2() {
+function overlayWitnessSignature() {
     var sigImg = signaturePad2.toDataURL();
     var image = new Image();
     image.onload = function() {
-        var c = document.getElementById("the-canvas").getContext("2d");
+        var c = document.getElementById("the-canvas1").getContext("2d");
         c.drawImage(image, 95, 963);
     };
     image.src = sigImg;
